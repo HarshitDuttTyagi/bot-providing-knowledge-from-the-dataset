@@ -9,7 +9,7 @@ import os
 # Paste your OpenAI API key here and hit enter
 CHUNK_SIZE = 600
 OVERLAP = 20
-openai.api_key = input("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");
+openai.api_key = input("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");
 scripts = json.load(open("/content/season1.json", encoding='ascii')) # https://www.kaggle.com/datasets/gjbroughton/start-trek-scripts?resource=download
 text = scripts['Game Of Thrones S01E07 You Win Or You Die.srt']['1']
 text_list = text.split()
@@ -38,7 +38,7 @@ f = openai.Embedding.create(
 )
 query_embedding = np.array(f['data'][0]['embedding'])
 
-# Now, let’s define our query and get its embedding. Our query is a simple question: who was the result? 
+# Now, let’s define our query and get its embedding. Our query is a simple question: what is the result? 
 #  In fact, if you ask ChatGPT this question without giving it the script, it doesn’t know the answer.
 #   We’ll see that with the right chunk of text, identified by cosine similarity, ChatGPT can answer correctly.
 
