@@ -9,7 +9,7 @@ import os
 # Paste your OpenAI API key here and hit enter
 CHUNK_SIZE = 600
 OVERLAP = 20
-openai.api_key = input("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");
+openai.api_key = input("Paste your OpenAI API key here");
 scripts = json.load(open("/content/season1.json", encoding='ascii')) # https://www.kaggle.com/datasets/gjbroughton/start-trek-scripts?resource=download
 text = scripts['Game Of Thrones S01E07 You Win Or You Die.srt']['1']
 text_list = text.split()
