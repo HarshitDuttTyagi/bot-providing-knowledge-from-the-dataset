@@ -9,19 +9,19 @@ import os
 # Paste your OpenAI API key here and hit enter
 CHUNK_SIZE = 600
 OVERLAP = 20
-openai.api_key = input("Paste your OpenAI API key here");
-scripts = json.load(open("/content/season1.json", encoding='ascii')) # https://www.kaggle.com/datasets/gjbroughton/start-trek-scripts?resource=download
-text = scripts['Game Of Thrones S01E07 You Win Or You Die.srt']['1']
+openai.api_key = input("paste your openai api key");
+scripts = json.load(open("C:/Users/Acer/Downloads/archive (2)/all_scripts_raw.json", encoding='ascii')) # https://www.kaggle.com/datasets/gjbroughton/start-trek-scripts?resource=download
+text = scripts['TNG']['episode 99']
 text_list = text.split()
 chunks = [text_list[i:i+CHUNK_SIZE] for i in range(0, len(text_list), CHUNK_SIZE-OVERLAP)]
 # Here's what the model is doing: we have a long piece of text that we want ChatGPT to be able to answer questions about.
-#  We first break that text up into chunks containing 600 words (technically called “tokens”), where each chunk overlaps 20 words with the following chunk. 
-#  We then send these chunks to OpenAI to obtain their embeddings. 
+#  We first break that text up into chunks containing 600 words (technically called “tokens”), where each chunk overlaps 20 words with the following chunk.
+#  We then send these chunks to OpenAI to obtain their embeddings.
 #  When we ask a question about our text, we find the question’s embedding, and use cosine similarity to find the chunk of text that is closest to our question.
 #   We then send a query to ChatGPT that includes our original question, as well as the chunk of text as context.
 
-# We loop over all the chunks, and send each one to OpenAI, get back the embedding, and then write a new line to the Dataframe df. 
-# Note that we are casting the embedding response (a string) to a numpy array. 
+# We loop over all the chunks, and send each one to OpenAI, get back the embedding, and then write a new line to the Dataframe df.
+# Note that we are casting the embedding response (a string) to a numpy array.
 # We do this because we will be doing numerical operations on the embedding in just a moment.
 df = pd.DataFrame(columns=['chunk', 'gpt_raw', 'embedding'])
 for chunk in chunks:
@@ -31,14 +31,14 @@ for chunk in chunks:
     )
     df.loc[len(df.index)] = (chunk, f, np.array(f['data'][0]['embedding']))
     df.head()
-    query = "what is the result"
+    query = "Who was the captain of the Excalibur?"
 f = openai.Embedding.create(
     model="text-embedding-ada-002",
     input=query
 )
 query_embedding = np.array(f['data'][0]['embedding'])
 
-# Now, let’s define our query and get its embedding. Our query is a simple question: what is the result? 
+# Now, let’s define our query and get its embedding. Our query is a simple question: what is the result?
 #  In fact, if you ask ChatGPT this question without giving it the script, it doesn’t know the answer.
 #   We’ll see that with the right chunk of text, identified by cosine similarity, ChatGPT can answer correctly.
 
